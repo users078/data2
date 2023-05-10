@@ -119,3 +119,27 @@ print('after differentiation '+str(j))
 OUTPUT:
 before differentiation sin(x) 
 after differentiation 0
+
+
+
+// Syntax for programs 
+
+import sympy as sym
+val = sym.Rational(1,2);
+
+print(val)
+
+x = sym.Symbol('x');
+y = sym.Symbol('y');
+
+print(sym.expand((x+y)**3))
+print(sym.simplify((x+x*y)/x))
+
+print(sym.limit(sym.sin(x)/x,x,0))
+print(sym.limit(x,x,sym.oo))
+print(sym.diff(sym.sin(x*x)+2,x))
+print(sym.series(sym.cos(x),x))
+print(sym.integrate(sym.sin(x),x))
+print(sym.solveset(x**4+2*x,x))
+someMatrix = sym.Matrix([[1,x],[2,0]])
+print(someMatrix**2)
