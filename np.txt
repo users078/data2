@@ -70,3 +70,27 @@ string = server.recv(1024)
 string = string.decode("utf-8") 
 print(string)
 server.close()
+
+
+Q) SIMPLE CHAT APP 
+
+Server Code: 
+import socket
+s = socket.socket();
+print("Server Created");
+s.bind(('localhost',9992)); # binds the localhost with the port no
+s.listen(3); # Connects upto three device
+print("Waiting for connection");
+c,addr = s.accept() # Accepts the connection
+print(addr);
+received = c.recv(1024);
+print(received);
+c.close()
+
+Client Code : 
+import socket
+c = socket.socket();
+c.connect(('localhost',9992))
+msg = input("enter your message");
+c.send(bytes(msg,'UTF-8'))
+c.close();
