@@ -1,0 +1,248 @@
+QUESTION 1:
+AIM: Create the below table and execute the insert, update and the below select statements.
+i) Write a query to display the total number of recipes available with the
+description “Chinese”
+ii) Write a query to display the id, name of the recipes with chef_id 'BL000002'.
+iii) Write a query to display the description of the recipes whose name begins with 'P'.
+CODE:
+import sqlite3 
+db=sqlite3.connect('recipes.db') 
+curs=db.cursor()
+curs.execute('CREATE TABLE recipes(id int,name varchar(400),description text,category_id int,chef_id 
+int,created datetime)')
+print("Table is ready")
+curs.execute('''INSERT INTO recipes (id,name,description,category_id,chef_id,created) 
+VALUES(1,'Kiami','Chinese',11,'BL000002','2022-4-4'),
+(2,'Caio','Korean',12,'BL000001','2022-4-4'),
+(3,'Chingua','Japanese',13,'BL000003','2022-4-4'),
+(4,'Puniket','Indian',14,'BL000004','2022-4-4'),
+(5,'Shin','Chinese',15,'BL000002','2022-4-4')''')
+curs.execute("SELECT count(id) FROM recipes where description='Chinese'") 
+res=curs.fetchall()
+for i in res:
+print(i)
+curs.execute("SELECT id,name FROM recipes where chef_id='BL000002'") 
+res=curs.fetchall()
+for i in res: 
+print(i)
+curs.execute("SELECT * FROM recipes where name like 'P%'") 
+res=curs.fetchall()
+for i in res: 
+print(i) 
+db.close() 
+OUTPUT:
+(2,)
+(1, 'Kiami')
+(5, 'Shin')
+(4, 'Puniket', 'Indian', 14, 'BL000004', '2022-4-4')
+
+QUESTION 2:
+AIM: Create a table movie of the below structure and assume data types.Movie_ID,
+Movie_Name, Genre, Language, Rating ,Do the following queries
+a. Update the movies rating by 10% and display it
+b. Delete the movies with movie_id 102
+c. Select movies whose rating is more than 3
+CODE:
+import sqlite3 
+db=sqlite3.connect('mydatabase.db') 
+curs=db.cursor()
+curs.execute("""CREATE TABLE IF NOT EXISTS Movie ( 
+Movie_ID VARCHAR(255),
+Movie_Name VARCHAR(255),
+Genre VARCHAR(255),
+Language VARCHAR(255), 
+Rating FLOAT);""")
+curs.execute("""INSERT INTO Movie VALUES ("101","No time to die","Mystery","English","8");""") 
+curs.execute("""INSERT INTO Movie VALUES ("102","POTC","Adventure","English","9");""") 
+curs.execute("""INSERT INTO Movie VALUES ("103","Jurassic Park","Thriller","English","9.2");""") 
+curs.execute("""INSERT INTO Movie VALUES ("107","Mission Impossible","Thriller","English","7.5");""") 
+curs.execute("""INSERT INTO Movie VALUES ("002","The Flopped","drama","English","2.5");""") 
+print("Original data")
+curs.execute("SELECT * FROM Movie") 
+res=curs.fetchall()
+for i in res: 
+print(i)
+print("")
+curs.execute("""UPDATE Movie SET Rating = ((Rating*110)/100);""") 
+print("Printing data after updating rating to 10%") 
+curs.execute("SELECT * FROM Movie")
+res=curs.fetchall() 
+for i in res:
+print(i) 
+print("")
+curs.execute("""DELETE from Movie where Movie_ID = 102 """) 
+print("Displaying data after deleting 102 Movie_ID") 
+curs.execute("SELECT * FROM Movie")
+res=curs.fetchall() 
+for i in res:
+print(i) 
+print("")
+print("Displaying data having rating value greater than 3") 
+curs.execute("SELECT * FROM Movie WHERE Rating>3")
+res=curs.fetchall() 
+for i in res:
+print(i) 
+print("") 
+db.commit() 
+db.close()
+OUTPUT:
+Original data
+('101', 'No time to die', 'Mystery', 'English', 8.0)
+('102', 'POTC', 'Adventure', 'English', 9.0)
+('103', 'Jurassic Park', 'Thriller', 'English', 9.2)
+('107', 'Mission Impossible', 'Thriller', 'English', 8.5)
+('108', 'The Flopped', 'drama', 'English', 2.5)
+Printing data after updating rating to 10% 
+('101', 'No time to die', 'Mystery', 'English', 8.8)
+('102', 'POTC', 'Adventure', 'English', 9.9)
+('103', 'Jurassic Park', 'Thriller', 'English', 10.12)
+('107', 'Mission Impossible', 'Thriller', 'English', 9.35)
+('108', 'The Flopped', 'drama', 'English', 2.75)
+Displaying data after deleting 102 Movie_ID 
+('101', 'No time to die', 'Mystery', 'English', 8.8)
+('103', 'Jurassic Park', 'Thriller', 'English', 10.12)
+('107', 'Mission Impossible', 'Thriller', 'English', 9.35)
+('108', 'The Flopped', 'drama', 'English', 2.75)
+Displaying data having rating value greater than 3 
+('101', 'No time to die', 'Mystery', 'English', 8.8)
+('103', 'Jurassic Park', 'Thriller', 'English', 10.12)
+('107', 'Mission Impossible', 'Thriller', 'English', 9.35)
+
+QUESTION 3:
+AIM: Create a course database with the following fields Product(ID, Prod_name,
+Supplier_id,Unit_price,Package,OrderID),OrderItem(ID,Order_id,Product_id,Unit_price, Quantity) using 
+Foreign key
+d. Display the total quantity of every product in the stock
+e. Sort the Unit_price based on the supplier_id
+f. Display the Product_name along with order_id and supplier_id
+CODE:
+import sqlite3 
+db=sqlite3.connect("mydatabase1.db") 
+curs=db.cursor()
+db.execute("PRAGMA foreign_keys = ON") 
+curs.execute("""CREATE TABLE IF NOT EXISTS Product(
+ID VARCHAR(255) PRIMARY KEY,
+Prod_name VARCHAR(255), 
+Supplier_id VARCHAR(255), 
+Unit_price INT,
+Package INT,
+Order_ID VARCHAR(255)
+);""")
+curs.execute("""INSERT OR IGNORE INTO Product VALUES('id1','pid1','1','500','100','Oid1');""")
+curs.execute("""INSERT OR IGNORE INTO Product VALUES('id2','pid2','2','1000','200','Oid2');""")
+curs.execute("""INSERT OR IGNORE INTO Product VALUES('id3','pid3','3','1500','300','Oid3');""")
+curs.execute("""INSERT OR IGNORE INTO Product VALUES('id4','pid4','4','2000','400','Oid4');""")
+curs.execute("""CREATE TABLE IF NOT EXISTS OrderItem( 
+ID VARCHAR(255),
+Order_id VARCHAR(255), 
+Product_ID VARCHAR(255), 
+Unit_price INT ,
+Quantity INT,
+FOREIGN KEY (ID) REFERENCES Product(ID)
+);""")
+curs.execute("""INSERT OR IGNORE INTO OrderItem VALUES('id1','oid1','pid1','500','10');""") 
+curs.execute("""INSERT OR IGNORE INTO OrderItem VALUES('id2','oid2','pid2','1000','20');""") 
+curs.execute("""INSERT OR IGNORE INTO OrderItem VALUES('id3','oid3','pid3','1500','30');""") 
+curs.execute("""INSERT OR IGNORE INTO OrderItem VALUES('id4','oid4','pid4','2000','40');""")
+print("Displaying total quantity of each product") 
+res=curs.execute("SELECT Quantity FROM OrderItem where ID = 'id1'") 
+for i in res:
+print(i)
+res=curs.execute("SELECT Quantity FROM OrderItem where ID = 'id2'") 
+for i in res:
+print(i)
+res=curs.execute("SELECT Quantity FROM OrderItem where ID = 'id3'") 
+for i in res:
+print(i)
+res=curs.execute("SELECT Quantity FROM OrderItem where ID = 'id4'") 
+for i in res:
+print(i) 
+print("")
+print("Displaying unit price based on supply id") 
+res=curs.execute("SELECT Unit_price FROM Product") 
+for i in res:
+print(i) 
+print("")
+print("Displaying Product name along with order id and supplier id")
+res=curs.execute("SELECT Prod_name ,Order_ID ,Supplier_id FROMProduct") 
+for i in res:
+print(i) 
+db.close() 
+OUTPUT:
+Displaying total quantity of each product 
+(10,)
+(20,)
+(30,)
+(40,)
+Displaying unit price based on supply id 
+(500,)
+(1000,)
+(1500,)
+(2000,)
+Displaying Product name along with order id and supplierid 
+('pid1', 'Oid1', '1')
+('pid2', 'Oid2', '2')
+('pid3', 'Oid3', '3')
+('pid4', 'Oid4', '4')
+
+
+QUESTION 4:
+AIM: Write a SQL lite3 statement to create a table named as job including columns job_id,job_title,Minsalary,Max_salary.job_id column does not contain any duplicate value at the time of insertion.
+CODE:
+import sqlite3 
+db=sqlite3.connect('mydatabase2.db')
+curs=db.cursor()
+curs.execute("""CREATE TABLE IF NOT EXISTS Job( 
+job_id VARCHAR(255),
+job_title VARCHAR(255), 
+Min_salary INT, 
+Max_salary INT);""")
+curs.execute("""INSERT INTO Job VALUES ("fsd01","Full Stack Developer","100000","1000000");""" ) 
+curs.execute("""INSERT INTO Job VALUES ("gd02","Game Developer","30000","300000");""") 
+curs.execute("""INSERT INTO Job VALUES ("an03","Animation Developer","50000","500000");""" ) 
+curs.execute("SELECT * FROM Job")
+res=curs.fetchall() 
+for i in res:
+print(i) 
+print("") 
+OUTPUT:
+('fsd01', 'Full Stack Developer', 100000, 1000000)
+('gd02', 'Game Developer', 30000, 300000)
+('an03', 'Animation Developer', 50000, 500000)
+
+QUESTION 5:
+AIM: Write a SQL lite3 statement to create a table names as job_history including columns employee_id, 
+start_date, end_date, job_id and department_id and make sure that, the employee_id column does not contain any 
+duplicate value at the time of insertion and the foreign key column job_id contain only those values which are 
+exists in the jobs table.
+CODE:
+import sqlite3
+db=sqlite3.connect("mydatabase3.db") 
+curs=db.cursor()
+db.execute("PRAGMA foreign_keys = ON")
+curs.execute("""CREATE TABLE IF NOT EXISTS jobs(
+Job_id VARCHAR(255) PRIMARY KEY
+);""")
+curs.execute("""INSERT OR IGNORE INTO jobs VALUES('j1');""") 
+curs.execute("""INSERT OR IGNORE INTO jobs VALUES('j2');""") 
+curs.execute("""INSERT OR IGNORE INTO jobs VALUES('j3');""")
+curs.execute("""CREATE TABLE IF NOT EXISTS job_history( 
+employeeid INTEGER NOT NULL,
+startdate DATE NOT NULL, 
+enddate DATE NOT NULL,
+job_id VARCHAR(255) NOT NULL,
+departmentid INTEGER NOT NULL,
+FOREIGN KEY (job_id) REFERENCES jobs(Job_id)
+);""")
+curs.execute("""INSERT OR IGNORE INTO job_history VALUES('1','2000-02-20','2010-02-20','j1','01');""")
+curs.execute("""INSERT OR IGNORE INTO job_history VALUES('2','2005-10-09','2016-05-10','j2','02');""")
+curs.execute("""INSERT INTO job_history VALUES('5','1990-05-11','1995-06-19','j1','10');""")
+curs.execute("""INSERT OR IGNORE INTO job_history VALUES('23','1998-02-15','2011-10-12','j3','05');""")
+curs.execute("SELECT * FROM job_history where job_id='j1'") 
+res=curs.fetchall()
+for i in res: 
+print(i) 
+db.close() 
+OUTPUT:
+(1, '2000-02-20', '2010-02-20', 'j1', 1)
+(5, '1990-05-11', '1995-06-19', 'j1', 10)
