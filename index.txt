@@ -1,0 +1,9 @@
+ap.txt -> Automata Programming
+classobject.ipynb -> Class Objects
+fp.txt -> functional programming ( lambda functions , map , reduce etc)
+lp.ipynb -> logical programming (pyDatalog)
+np.txt -> network programming client server 
+os.ipynb -> Operating system
+sp.txt -> Symbolic programming 
+sql.ipynb -> sql programs
+tkinter.ipynb -> tkinter programs
